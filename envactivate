@@ -1,0 +1,4 @@
+#! /bin/bash
+
+source lockvenv/bin/activate
+echo "lock env activated"
