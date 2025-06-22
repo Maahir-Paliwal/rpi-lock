@@ -13,8 +13,8 @@ import face_recognition
 
 #Change this name to the person I want to add
 NAME = "maahir"
-SCALE_FACTOR = 1
-BLUE = (0,255,0)
+SCALE_FACTOR = 5
+BLUE = (244,42,3)
 THICKNESS = 3
 
 face_locations =[]
@@ -35,7 +35,7 @@ def take_photos(name):
 
     #start the camera up
     cam = Picamera2()
-    cam.configure(cam.create_preview_configuration(main ={"size": (640,480), "format": 'XRGB8888'}))
+    cam.configure(cam.create_preview_configuration(main ={"size": (1920,1080), "format": 'XRGB8888'}))
     cam.start()
 
     #allow for configurations to set up 
@@ -48,10 +48,6 @@ def take_photos(name):
     while True:
         #capture the frame from the picam 
         frame = cam.capture_array()
-
-        cv2.imshow('Capture', frame)
-
-        time.sleep(5)
         
         #resize the frame so that it can run quicker
         resized_frame = cv2.resize(frame, (0,0), fx=(1/SCALE_FACTOR),fy=(1/SCALE_FACTOR))
@@ -59,38 +55,44 @@ def take_photos(name):
 
 
         face_locations = face_recognition.face_locations(rgb_resizedframe)
-        (top, right, bottom, left) = face_locations
 
-        top *= SCALE_FACTOR
-        right *= SCALE_FACTOR
-        bottom *= SCALE_FACTOR
-        left *= SCALE_FACTOR
+        if (len(face_locations) == 1):
+            (top, right, bottom, left) = face_locations[0]
+
+            top *= SCALE_FACTOR
+            right *= SCALE_FACTOR
+            bottom *= SCALE_FACTOR
+            left *= SCALE_FACTOR
+
+            #draw the rectangle but with 5px of padding
+            cv2.rectangle(frame,(left - 20 ,top - 20), (right +20, bottom + 20), BLUE, THICKNESS)
 
         
-        #draw the rectangle but with 5px of padding
-        cv2.rectangle(frame,(left - 5 ,top - 5), (bottom + 5, right +5), BLUE, THICKNESS)
+        cv2.imshow('Capture', frame)
 
         #Wait one millisecond and perform bitwise calculation for ASCII value
-        key = cv2.waitKey(1) & 11111111
+        key = cv2.waitKey(1) & 0xFF
 
         if (key == ord(' ')):
             num_photos += 1
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{name}_{timestamp}.jpg"
 
-            #important that your face is not too far from the center of the screen or this
-            # may cause undefined behaviour
-            cropped_face = frame[(top-2):(bottom+2), (left-2):(right+2)]
-
             filepath = f"./{folder}/{filename}"
 
-            cv2.imwrite(filepath, cropped_face)
+            #important that your face is not too far from the center of the screen or this
+            # may cause undefined behaviour
+
+            if (len(face_locations) == 1):
+                cropped_face = frame[(top-15):(bottom+15), (left-15):(right+15)]
+                cv2.imwrite(filepath, cropped_face)
+            else:
+                cv2.imwrite(filepath, frame)
 
             print(f"Photo {num_photos} saved to {filepath}")
         
         elif (key ==ord('q')):
             break 
-
 
 
     #clean
