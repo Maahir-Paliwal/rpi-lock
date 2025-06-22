@@ -9,8 +9,6 @@ import cv2
 import face_recognition
 
 
-
-
 #Change this name to the person I want to add
 NAME = "maahir"
 SCALE_FACTOR = 5
@@ -65,7 +63,7 @@ def take_photos(name):
             left *= SCALE_FACTOR
 
             #draw the rectangle but with 5px of padding
-            cv2.rectangle(frame,(left - 20 ,top - 20), (right +20, bottom + 20), BLUE, THICKNESS)
+            cv2.rectangle(frame,(left - 80 ,top - 80), (right + 80, bottom + 80), BLUE, THICKNESS)
 
         
         cv2.imshow('Capture', frame)
@@ -84,7 +82,7 @@ def take_photos(name):
             # may cause undefined behaviour
 
             if (len(face_locations) == 1):
-                cropped_face = frame[(top-15):(bottom+15), (left-15):(right+15)]
+                cropped_face = frame[(top-75):(bottom+75), (left-75):(right+75)]
                 cv2.imwrite(filepath, cropped_face)
             else:
                 cv2.imwrite(filepath, frame)
