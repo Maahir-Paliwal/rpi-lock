@@ -2,7 +2,6 @@ from gpiozero import Button
 from gpiozero import LED
 from signal import pause
 from functools import partial
-from time import sleep 
 from fsm import handle_press
 
 
@@ -23,6 +22,7 @@ button_tuple = [("1", button1), ("2",button2), ("3",button3), ("4",button4),
 
 
 current_state = "A"
+
 def handle_press_wrapper(label):
     global current_state
     current_state = handle_press(label, current_state)
