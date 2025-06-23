@@ -80,6 +80,22 @@ def format_frame(frame):
 
     return frame, names_in_picture
 
+def who_in_frame(names_in_picture):
+
+    people_in_picture =[]
+    for name in names_in_picture:
+        if (name in known_face_encodings):
+            people_in_picture.append(name)
+
+    if len(people_in_picture) == 0:
+        print("Unauthorized persons cannot open the door")
+
+    else:
+        for name in people_in_picture:
+            print(f"Welcome {name}.")
+
+    return len(people_in_picture) != 0
+
 while True:
     frame = cam.capture_array()
 
