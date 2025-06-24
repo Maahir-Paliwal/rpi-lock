@@ -9,18 +9,11 @@ THICKNESS = 3
 face_locations = []
 face_encodings = []
 
-
-#Load the data from model.pickle 
 with open("model.pickle", "rb") as file:
     data = pickle.load(file)
 
 known_face_encodings = data["encodings"]
 known_names = data["names"]
-
-#start the camera up
-cam = Picamera2()
-cam.configure(cam.create_preview_configuration(main ={"size": (1920,1080), "format": 'XRGB8888'}))
-cam.start()
 
 def analyze_faces(frame):
     #we can keep these global since we never append to them
@@ -80,11 +73,13 @@ def format_frame(frame):
 
     return frame, names_in_picture
 
-def who_in_frame(names_in_picture):
+
+
+def who_in_frame(names_in_picture, recognized_names):
 
     people_in_picture =[]
     for name in names_in_picture:
-        if (name in known_face_encodings):
+        if (name in recognized_names):
             people_in_picture.append(name)
 
     if len(people_in_picture) == 0:
@@ -96,24 +91,38 @@ def who_in_frame(names_in_picture):
 
     return len(people_in_picture) != 0
 
-while True:
-    frame = cam.capture_array()
 
-    #get the names in the pic
-    #This also updates global vars face_locations and face_encodings
-    frame, names_in_picture = format_frame(frame)
+if __name__ == "main":
+    #Load the data from model.pickle 
+    with open("model.pickle", "rb") as file:
+        data = pickle.load(file)
 
-    cv2.imshow('Facial Recognition Live Feed', frame)
+    known_face_encodings = data["encodings"]
+    known_names = data["names"]
 
-    #Wait one millisecond and perform bitwise calculation for ASCII value
-    key = cv2.waitKey(1) & 0xFF
+    #start the camera up
+    cam = Picamera2()
+    cam.configure(cam.create_preview_configuration(main ={"size": (1920,1080), "format": 'XRGB8888'}))
+    cam.start()
 
-    if (key ==ord('q')):
-        break
+    while True:
+        frame = cam.capture_array()
 
-# By breaking the loop we run this code here which closes everything
-cv2.destroyAllWindows()
-cam.stop()
+        #get the names in the pic
+        #This also updates global vars face_locations and face_encodings
+        frame, names_in_picture = format_frame(frame)
+
+        cv2.imshow('Facial Recognition Live Feed', frame)
+
+        #Wait one millisecond and perform bitwise calculation for ASCII value
+        key = cv2.waitKey(1) & 0xFF
+
+        if (key ==ord('q')):
+            break
+
+    # By breaking the loop we run this code here which closes everything
+    cv2.destroyAllWindows()
+    cam.stop()
 
 
 
