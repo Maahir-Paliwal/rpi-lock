@@ -10,7 +10,7 @@ import face_recognition
 
 
 #Change this name to the person I want to add
-NAME = "maahir"
+NAME = "esme"
 SCALE_FACTOR = 5
 BLUE = (244,42,3)
 THICKNESS = 3

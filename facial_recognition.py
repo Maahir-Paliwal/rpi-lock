@@ -91,39 +91,38 @@ def who_in_frame(names_in_picture, recognized_names):
 
     return len(people_in_picture) != 0
 
+'''
+#Load the data from model.pickle 
+with open("model.pickle", "rb") as file:
+    data = pickle.load(file)
 
-if __name__ == "main":
-    #Load the data from model.pickle 
-    with open("model.pickle", "rb") as file:
-        data = pickle.load(file)
+known_face_encodings = data["encodings"]
+known_names = data["names"]
 
-    known_face_encodings = data["encodings"]
-    known_names = data["names"]
+#start the camera up
+cam = Picamera2()
+cam.configure(cam.create_preview_configuration(main ={"size": (1920,1080), "format": 'XRGB8888'}))
+cam.start()
 
-    #start the camera up
-    cam = Picamera2()
-    cam.configure(cam.create_preview_configuration(main ={"size": (1920,1080), "format": 'XRGB8888'}))
-    cam.start()
+while True:
+    frame = cam.capture_array()
 
-    while True:
-        frame = cam.capture_array()
+    #get the names in the pic
+    #This also updates global vars face_locations and face_encodings
+    frame, names_in_picture = format_frame(frame)
 
-        #get the names in the pic
-        #This also updates global vars face_locations and face_encodings
-        frame, names_in_picture = format_frame(frame)
+    cv2.imshow('Facial Recognition Live Feed', frame)
 
-        cv2.imshow('Facial Recognition Live Feed', frame)
+    #Wait one millisecond and perform bitwise calculation for ASCII value
+    key = cv2.waitKey(1) & 0xFF
 
-        #Wait one millisecond and perform bitwise calculation for ASCII value
-        key = cv2.waitKey(1) & 0xFF
+    if (key ==ord('q')):
+        break
 
-        if (key ==ord('q')):
-            break
-
-    # By breaking the loop we run this code here which closes everything
-    cv2.destroyAllWindows()
-    cam.stop()
-
+# By breaking the loop we run this code here which closes everything
+cv2.destroyAllWindows()
+cam.stop()
+'''
 
 
 

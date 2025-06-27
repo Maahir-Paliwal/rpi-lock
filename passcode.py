@@ -59,8 +59,8 @@ def handle_press_wrapper(label):
     else:
 
         #Only read this variable if it is not being written to
-        with names_lock:
-            signal = who_in_frame(current_names, known_names)
+        #with names_lock:
+        signal = who_in_frame(current_names, known_names)
     
         #if granted access, manually change FSM to be in unlocked state 
         if (signal):
@@ -102,8 +102,8 @@ while True:
 
 
     #Only write to this variable when it is not being read
-    with names_lock:
-        current_names = names_in_picture
+    #with names_lock:
+    current_names = names_in_picture
 
     cv2.imshow('Facial Recognition Live Feed', frame)
 
@@ -119,5 +119,4 @@ while True:
 cv2.destroyAllWindows()
 cam.stop()
 
-time.pause()
 
