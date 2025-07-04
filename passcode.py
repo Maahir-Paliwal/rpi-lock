@@ -5,8 +5,6 @@ from fsm import handle_press
 from facial_recognition import format_frame, who_in_frame
 from picamera2 import Picamera2
 import cv2
-import threading
-import signal 
 import time 
 import pickle
 
@@ -15,7 +13,6 @@ import pickle
 current_state = "A"
 names_in_picture = []
 current_names = []
-names_lock = threading.Lock()
 
 
 button1 = Button(26, pull_up=True, bounce_time=0.05)
