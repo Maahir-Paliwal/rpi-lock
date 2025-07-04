@@ -1,9 +1,13 @@
 # rpi-lock
 
+
+
 # Goals
 1. Create a lock with facial ID capabilities and passcode override
 2. Utilize raspberry pi + breadboard + raspbpi camera
 3. Leverage a finite state machine (Mealy FSM) to effectively handle loicking and unlocking logic
+
+
 
 # Software used
 1. Scripting done with python
@@ -15,12 +19,16 @@
 2. Environment handled with venv 
 3. Github for source control
 
+
+
 # Hardware used
 1. Raspberry pi 5
 2. Standard wiring (22-28AWG) wires for current control on breadboard and GPIO pins
 3. Breadboard buttons to simulate pin numbers, facial recog button, and lock button
 4. Solenoid latch + relay + 12V power source in order to simulate locking and unlocking
     A. 20 AWG wires for Solenoid logic because solenoid requires ~ 0.6A (too strong of current for regular wiring)
+
+
 
 # Logic and Workflow
 take_photos.py -> model_training.py -> passcode.py
@@ -36,6 +44,8 @@ take_photos.py -> model_training.py -> passcode.py
 3. passcode.py
     - Compares all known encodings in a dataset to the face of the user who wants to enter (logic handled in facial_recognition.py)
     - Calls fsm.py for state machine logic for passcode
+
+
 
 # How to use
 1. Pip install the requirements.txt document 
